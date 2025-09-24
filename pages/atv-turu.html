@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATV Turları Rezervasyon</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .rez-form { max-width: 400px; margin: 40px auto; background: #fff3e6; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px #0002; }
+    .rez-form label { display: block; margin-bottom: 8px; font-weight: bold; }
+    .rez-form input, .rez-form select { width: 100%; padding: 8px; margin-bottom: 16px; border-radius: 6px; border: 1px solid #ccc; }
+    .rez-form button { background: #ab4610; color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; }
+    .rez-form button:hover { background: #c07a45; }
+    .rez-success { color: green; font-weight: bold; text-align: center; }
+    .rez-fail { color: red; font-weight: bold; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="section" style="padding-top:40px;">
+    <h2>ATV Turları</h2>
+    <div class="card-container">
+      <div class="card" style="background-image:url('../img/kizilvadi.jpg')">
+        <div class="content">
+          <h3>Kapadokya ATV Turu</h3>
+          <p>Kapadokya'nın eşsiz vadilerinde macera dolu bir ATV turu deneyimi yaşayın. Gün batımı ve farklı saat seçenekleriyle unutulmaz anlar sizi bekliyor.</p>
+        </div>
+      </div>
+    </div>
+    <h3 style="color:#ab4610; margin-top:40px;">Rezervasyon Yap</h3>
+    <form class="rez-form" id="atvForm">
+      <label>Ad Soyad</label>
+      <input type="text" name="adsoyad" required>
+      <label>Telefon</label>
+      <input type="tel" name="telefon" required>
+      <label>Tarih</label>
+      <input type="date" name="tarih" required>
+      <label>Kişi Sayısı</label>
+      <input type="number" name="kisi" min="1" value="1" required>
+      <label>Tur Saati</label>
+      <select name="saat" required>
+        <option value="09:00">09:00</option>
+        <option value="12:00">12:00</option>
+        <option value="15:00">15:00</option>
+        <option value="18:00">18:00</option>
+      </select>
+      <button type="submit">Rezervasyon Yap</button>
+      <div id="atvResult"></div>
+    </form>
+  </div>
+  <script>
+    document.getElementById('atvForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        tur: 'ATV',
+        adsoyad: form.adsoyad.value,
+        telefon: form.telefon.value,
+        tarih: form.tarih.value,
+        kisi: form.kisi.value,
+        saat: form.saat.value
+      };
+      const res = await fetch('../save-rezervasyon.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      const div = document.getElementById('atvResult');
+      if(result.success) {
+        div.textContent = 'Rezervasyon başarılı!';
+        div.className = 'rez-success';
+        form.reset();
+      } else {
+        div.textContent = 'Hata: ' + (result.error || 'Rezervasyon başarısız.');
+        div.className = 'rez-fail';
+      }
+    };
+  </script>
+</body>
+</html>

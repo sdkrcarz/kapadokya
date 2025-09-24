@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Fancybox CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nevşehir Gezi Rehberi</title>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url("img/arkaplan.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
+    }
+
+    .navbar {
+      background-color: #ab4610;
+      color: white;
+      padding: 15px 30px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: bold;
+    }
+
+    .hero {
+      /* background-image: url("img/arkaplan.jpg"); */
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-shadow: 2px 2px 5px black;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+
+    .hero .buttons a {
+      background-color: #c07a45;
+      color: white;
+      padding: 15px 25px;
+      margin: 10px;
+      border: none;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    .section {
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    .section h2 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px;
+    }
+
+    .card {
+      width: 250px;
+      height: 300px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      position: relative;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.4);
+      z-index: 1;
+    }
+
+    .card .content {
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+      height: 90%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .card p {
+      margin: 10px 0 10px;
+    }
+
+    .btn-detay {
+      background-color: #bc7f51;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 14px;
+      display: inline-block;
+      transition: background-color 0.3s;
+      text-align: center;
+      width: fit-content;
+      align-self: flex-start;
+    }
+
+    .btn-detay:hover {
+      background-color: #ab4610;
+    }
+
+    .card1 {
+      background-image: url("img/uchisarkalesi.jpeg");
+    }
+
+    .card2 {
+      background-image: url("img/derinkuyu.jpg");
+    }
+
+    .card3 {
+      background-image: url("img/avanos.jpg");
+    }
+    
+    .card4 {
+      background-image: url("img/goremeacikhava.jpg");
+    }
+
+    .footer {
+      background-color: #8b4f2f;
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .footer a {
+      color: #fff3cd;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    .iletisim-baslik {
+      color: #fff !important;
+    }
+    
+    #iletisim p {
+      color: white;
+    }
+
+    #iletisim a {
+      color: #ffd700;
+      text-decoration: underline;
+    }
+
+    .map-container {
+      width: 100%; 
+      height: 400px; 
+      margin-top: 30px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    /* Otel Kayıt Formu Stilleri */
+    .hotel-form {
+      display: none;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 30px;
+      background-color: rgba(255,255,255,0.95);
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .hotel-form label {
+      font-weight: 600;
+      color: #5a3921;
+    }
+
+    .hotel-form .form-control, 
+    .hotel-form .form-select {
+      border: 1px solid #ab4610;
+      padding: 10px;
+      margin-bottom: 15px;
+    }
+
+    .hotel-form .form-control:focus, 
+    .hotel-form .form-select:focus {
+      border-color: #c07a45;
+      box-shadow: 0 0 0 0.25rem rgba(172, 70, 16, 0.25);
+    }
+
+    .hotel-form .btn-submit {
+      background-color: #ab4610;
+      color: white;
+      padding: 12px 30px;
+      font-weight: 600;
+      border: none;
+      border-radius: 30px;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+
+    .hotel-form .btn-submit:hover {
+      background-color: #8b4f2f;
+    }
+
+    .form-title {
+      color: #ab4610;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .close-form {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #ab4610;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div><strong>Nevşehir</strong></div>
+    <div>
+  <a href="#gezilecek">Gezilecek Yerler</a>
+  <a href="#oteller">Oteller</a>
+  <a href="pages/atv-turu.html">ATV Turu</a>
+  <a href="pages/balon-turu.html">Balon Turu</a>
+  <a href="#iletisim">İletişim</a>
+    </div>
+  </div>
+
+  <!-- Anasayfa -->
+  <div class="hero">
+    <h1>KAPADOKYA'YA HOŞ GELDİNİZ</h1>
+    <div class="buttons">
+      <a href="#gezilecek">Gezilecek Yerler</a>
+      <a href="#oteller">Konaklama</a>
+      <a href="pages/atv-turu.html">ATV Turları</a>
+      <a href="pages/balon-turu.html">Balon Turları</a>
+    </div>
+  </div>
+
+  <!-- Gezilecek Yerler -->
+  <div class="section" id="gezilecek">
+    <h2>Gezilecek Yerler</h2>
+    <div class="card-container">
+      <div class="card card1">
+        <div class="content">
+          <h3>Uçhisar Kalesi</h3>
+          <p>Kapadokya'nın en yüksek noktası, harika manzaralar sunar.</p>
+         <a href="uchisar-kalesi.html" class="btn-detay fancybox-html" data-fancybox="uchisar" data-type="iframe" data-caption="<h2 style='color:#ab4610;margin-bottom:10px;'>Uçhisar Kalesi</h2><span style='font-size:18px;color:#333;'>Kapadokya'nın en yüksek noktası, panoramik manzara ve tarihi atmosfer.</span>" data-width="900" data-height="600">Detaylar</a>
+        </div>
+      </div>
+      <div class="card card2">
+        <div class="content">
+          <h3>Derinkuyu Yeraltı Şehri</h3>
+          <p>Tarihi gizemli yapısıyla yerin altındaki şehir deneyimi.</p>
+          <a href="derinkuyu.html" class="btn-detay fancybox-html" data-fancybox data-type="iframe" data-caption="Derinkuyu Yeraltı Şehri">Detaylar</a>
+        </div>
+      </div>
+      <div class="card card3">
+        <div class="content">
+          <h3>Avanos</h3>
+          <p>Çömlek yapımıyla ünlü, Kızılırmak kıyısında güzel bir kasaba.</p>
+          <a href="avanos.html" class="btn-detay fancybox-html" data-fancybox data-type="iframe" data-caption="Avanos">Detaylar</a>
+        </div>
+      </div>
+      <div class="card card4">
+        <div class="content">
+          <h3>Göreme Açık Hava Müzesi</h3>
+          <p>UNESCO Dünya Mirası Listesi'nde yer alan tarihi kiliseler.</p>
+          <a href="goreme.html" class="btn-detay fancybox-html" data-fancybox data-type="iframe" data-caption="Göreme Açık Hava Müzesi">Detaylar</a>
+        </div>
+      </div>
+      <!-- Zelve Açık Hava Müzesi -->
+      <div class="card" style="background-image: url('img/zelve.jpg')">
+        <div class="content">
+          <h3>Zelve Açık Hava Müzesi</h3>
+          <p>Peri bacaları ve tarihi manastır kompleksiyle ünlü açık hava müzesi.</p>
+          <a href="zelve.html" class="btn-detay fancybox-html" data-fancybox data-type="iframe" data-caption="Zelve Açık Hava Müzesi">Detaylar</a>
+        </div>
+      </div>
+      <!-- Kaymaklı Yeraltı Şehri -->
+      <div class="card" style="background-image: url('img/kaymakli.jpg')">
+        <div class="content">
+          <h3>Kaymaklı Yeraltı Şehri</h3>
+          <p>Kapadokya'nın en büyük ve derin yeraltı şehirlerinden biri.</p>
+          <a href="kaymakli.html" class="btn-detay fancybox-html" data-fancybox data-type="iframe" data-caption="Kaymaklı Yeraltı Şehri">Detaylar</a>
+        </div>
+      </div>
+      <!-- Kızıl Vadi -->
+      <div class="card" style="background-image: url('img/kizilvadi.jpg')">
+        <div class="content">
+          <h3>Kızıl Vadi</h3>
+          <p>Gün batımında kızıl renge bürünen büyüleyici vadi.</p>
+          <a href="kizilvadi.html" class="btn-detay fancybox-html" data-fancybox data-type="iframe" data-caption="Kızıl Vadi">Detaylar</a>
+        </div>
+      </div>
+      <!-- Ihlara Vadisi -->
+      <div class="card" style="background-image: url('img/ihlara.jpg')">
+        <div class="content">
+          <h3>Ihlara Vadisi</h3>
+          <p>Doğal güzellikleri ve kaya kiliseleriyle ünlü derin vadi.</p>
+          <a href="ihlara.html" class="btn-detay fancybox-html" data-fancybox data-type="iframe" data-caption="Ihlara Vadisi">Detaylar</a>
+        </div>
+      </div>
+      <!-- Üç Güzeller -->
+      <div class="card" style="background-image: url('img/ucguzeller.jpg')">
+        <div class="content">
+          <h3>Üç Güzeller</h3>
+          <p>Kapadokya'nın simgesi haline gelmiş üç peri bacası.</p>
+          <a href="ucguzeller.html" class="btn-detay fancybox-html" data-fancybox data-type="iframe" data-caption="Üç Güzeller">Detaylar</a>
+        </div>
+      </div>
+      <!-- Paşabağları (Rahibeler Vadisi) -->
+      <div class="card" style="background-image: url('img/pasabag.jpg')">
+        <div class="content">
+          <h3>Paşabağları (Rahibeler Vadisi)</h3>
+          <p>Çok başlı peri bacaları ve tarihi yaşam alanlarıyla ünlü vadi.</p>
+          <a href="pasabag.html" class="btn-detay fancybox-html" data-fancybox data-type="iframe" data-caption="Paşabağları (Rahibeler Vadisi)">Detaylar</a>
+        </div>
+      </div>
+      <!-- Kapadokya Sanat ve Tarih Müzesi -->
+      <div class="card" style="background-image: url('img/sanatmuzesi.jpg')">
+        <div class="content">
+          <h3>Kapadokya Sanat ve Tarih Müzesi</h3>
+          <p>Bölgenin kültürel mirasını yansıtan sanat ve tarih müzesi.</p>
+          <a href="sanatmuzesi.html" class="btn-detay fancybox-html" data-fancybox data-type="iframe" data-caption="Kapadokya Sanat ve Tarih Müzesi">Detaylar</a>
+        </div>
+      </div>
+      <!-- Temenni Tepesi -->
+      <div class="card" style="background-image: url('img/temenni.jpg')">
+        <div class="content">
+          <h3>Temenni Tepesi</h3>
+          <p>Ürgüp'ün en yüksek noktası, panoramik Kapadokya manzarası sunar.</p>
+          <a href="temenni.html" class="btn-detay fancybox-html" data-fancybox data-type="iframe" data-caption="Temenni Tepesi">Detaylar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Oteller -->
+  <div class="section" id="oteller">
+    <h2>Oteller</h2>
+    <div class="card-container" id="hotelsContainer"></div>
+    <script>
+      // Otel bilgileri dizisi (galeri eklendi)
+      const hotels = [
+        {
+          name: "Museum Hotel",
+          image: "img/museumhotel.jpg",
+          stars: 5,
+          features: ["Lüks", "Otantik mağara otel", "Kapadokya manzaralı"],
+          gallery: ["img/mushot/res1.webp","img/mushot/res2.webp","img/mushot/res3.jpg","img/mushot/res4.jpg","img/mushot/res5.webp","img/mushot/res6.jpg","img/mushot/res7.jpg"]
+        },
+        {
+          name: "Argos in Cappadocia",
+          image: "img/argoshotel.jpg",
+          stars: 5,
+          features: ["Taş mimari", "Zarif odalar", "Doğal manzara"],
+          gallery: ["img/arghot/res1.jpg", "img/arghot/res2.webp", "img/arghot/res3.webp","img/arghot/res4.webp","img/arghot/res5.webp"]
+        },
+        {
+          name: "Cappadocia Cave Suites",
+          image: "img/cavesuites.jpg",
+          stars: 4,
+          features: ["Mağara otel", "Kapadokya atmosferi"],
+          gallery: ["img/cavhot/res1.jpg", "img/cavhot/res2.jpg", "img/cavhot/res3.jpg","img/cavhot/res4.jpg","img/cavhot/res5.jpg"]
+          
+        },
+        {
+          name: "Hermes Cave Hotel",
+          image: "img/hermescave.jpg",
+          stars: 4,
+          features: ["Geleneksel mimari", "Modern konfor"],
+          gallery: ["img/hermhot/res1.webp", "img/hermhot/res2.jpeg", "img/hermhot/res3.jpg","img/hermhot/res4.jpg"]
+        },
+        {
+          name: "Kaya Hotel",
+          image: "img/kayaotel.jpg",
+          stars: 4,
+          features: ["Konforlu", "Modern taş otel"],
+          gallery: ["img/kayahot/res1.webp", "img/kayahot/res2.jpg","img/kayahot/res3.jpg","img/kayahot/res4.jpg","img/kayahot/res5.jpg"]
+        },
+        {
+          name: "Sultan Cave Suites",
+          image: "img/sultancave.jpg",
+          stars: 5,
+          features: ["Teraslı", "Balon manzaralı", "Popüler otel"],
+          gallery: ["img/sulthot/res1.jpg", "img/sulthot/res2.jpg", "img/sulthot/res3.jpg","img/sulthot/res4.jpg","img/sulthot/res5.webp"]
+        },
+        {
+          name: "Cappadocia Stone Palace",
+          image: "img/stonepalace.jpg",
+          stars: 3,
+          features: ["Taş mimari", "Otantik", "Ekonomik konaklama"],
+          gallery: ["img/stonhot/res1.jpg", "img/stonhot/res2.jpg", "img/stonhot/res3.jpg","img/stonhot/res4.jpg","img/stonhot/res5.jpg"]
+        },
+        {
+          name: "Cratus Stone Palace",
+          image: "img/cratus.jpg",
+          stars: 5,
+          features: ["Lüks taş mimari", "Modern konfor"],
+          gallery: ["img/crathot/res1.jpg", "img/crathot/res2.jpg", "img/crathot/res3.jpg","img/crathot/res4.webp","img/crathot/res5.jpg","img/crathot/res6.jpg"]
+        },
+        {
+          name: "Roma Cave Suite",
+          image: "img/romacave.jpg",
+          stars: 4,
+          features: ["Lüks mağara süitler", "Kapadokya manzarası"],
+          gallery: ["img/romahot/res1.jpg", "img/romahot/res2.jpg", "img/romahot/res3.jpg","img/romahot/res4.jpg","img/romahot/res5.jpg"]
+        },
+        {
+          name: "Dere Suites Cappadocia",
+          image: "img/deresuites.jpg",
+          stars: 5,
+          features: ["Lüks mağara", "Taş süitler", "Otantik atmosfer"],
+          gallery: ["img/deresuites.jpg", "img/derehot/res1.jpg", "img/derehot/res2.jpg","img/derehot/res3.jpg","img/derehot/res4.jpg","img/derehot/res5.jpg"]
+        },
+        {
+          name: "Rox Cappadocia",
+          image: "img/rox.jpg",
+          stars: 4,
+          features: ["Teraslı", "Butik otel", "Sıcak atmosfer"],
+          gallery: ["img/roxhot/res1.jpg", "img/roxhot/res2.jpg", "img/roxhot/res3.jpg","img/roxhot/res4.jpg","img/roxhot/res5.jpg"]
+        },
+        {
+          name: "Mithra Cave Hotel",
+          image: "img/mithra.jpg",
+          stars: 5,
+          features: ["Teraslı", "Mağara konsepti", "Göreme'nin kalbinde"],
+          gallery: ["img/mithra.jpg", "img/mithot/res1.jpg", "img/mithot/res2.jpg","img/mithot/res3.webp","img/mithot/res4.webp"]
+        },
+      ];
+
+      // Otel kartlarını dinamik olarak oluştur
+      const hotelsContainer = document.getElementById('hotelsContainer');
+      hotels.forEach(hotel => {
+        const card = document.createElement('div');
+        card.className = 'card hotel_card';
+        card.style.backgroundImage = `url('${hotel.image}')`;
+        card.innerHTML = `
+          <div class="content">
+            <h3>${hotel.name}</h3>
+            <div style="margin-bottom:8px;">
+              ${'★'.repeat(hotel.stars)}${'☆'.repeat(5-hotel.stars)}
+            </div>
+            <ul style="text-align:left; color:#fff; font-size:14px; margin-bottom:10px; padding-left:18px;">
+              ${hotel.features.map(f => `<li>${f}</li>`).join('')}
+            </ul>
+            <div style="display:flex; gap:10px;">
+              <div class="btn-detay" data-hotel="${hotel.name}" onclick="showHotelFormModal(event)">Rezervasyon</div>
+              <div class="btn-detay" onclick="showHotelGallery('${hotel.name}')">Galeri</div>
+            </div>
+          </div>
+        `;
+        hotelsContainer.appendChild(card);
+      });
+
+      // Galeri açma fonksiyonu
+      function showHotelGallery(hotelName) {
+        const hotel = hotels.find(h => h.name === hotelName);
+        if (!hotel || !hotel.gallery || hotel.gallery.length === 0) return;
+        const images = hotel.gallery.map(img => ({
+          src: img,
+          type: 'image',
+          caption: hotel.name
+        }));
+        // Fancybox v4 için doğru fonksiyon: show
+        if (window.Fancybox && typeof window.Fancybox.show === 'function') {
+          window.Fancybox.show(images, {
+            Thumbs: false,
+            Toolbar: {
+              display: ["close"]
+            },
+          });
+        } else if (typeof Fancybox !== 'undefined' && typeof Fancybox.show === 'function') {
+          Fancybox.show(images, {
+            Thumbs: false,
+            Toolbar: {
+              display: ["close"]
+            },
+          });
+        } else {
+          alert('Galeri görüntüleyici yüklenemedi. Lütfen sayfayı yenileyin.');
+        }
+      }
+    </script>
+
+    <!-- Bootstrap Modal for Hotel Reservation Form -->
+    <div class="modal fade" id="hotelFormModal" tabindex="-1" aria-labelledby="hotelFormModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title form-title" id="hotelFormModalLabel">OTEL REZERVASYON FORMU</h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+          </div>
+          <div class="modal-body">
+            <form id="hotelRegistrationForm">
+              <input type="hidden" id="selectedHotel">
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="guestName" class="form-label">Ad Soyad*</label>
+                  <input type="text" class="form-control" id="guestName" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="guestEmail" class="form-label">E-posta*</label>
+                  <input type="email" class="form-control" id="guestEmail" required>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="guestPhone" class="form-label">Telefon*</label>
+                  <input type="tel" class="form-control" id="guestPhone" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="guestCount" class="form-label">Misafir Sayısı*</label>
+                  <select class="form-select" id="guestCount" required>
+                    <option value="">Seçiniz</option>
+                    <option value="1">1 Kişi</option>
+                    <option value="2">2 Kişi</option>
+                    <option value="3">3 Kişi</option>
+                    <option value="4">4 Kişi</option>
+                    <option value="5">5+ Kişi</option>
+                  </select>
+                </div>
+              </div>
+              <!-- Diğer Misafir Bilgileri Dinamik Alanı -->
+              <div id="otherGuestsContainer"></div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="checkinDate" class="form-label">Giriş Tarihi*</label>
+                  <input type="date" class="form-control" id="checkinDate" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="checkoutDate" class="form-label">Çıkış Tarihi*</label>
+                  <input type="date" class="form-control" id="checkoutDate" required>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="roomType" class="form-label">Oda Tipi*</label>
+                <select class="form-select" id="roomType" required>
+                  <option value="">Seçiniz</option>
+                  <option value="standart">Standart Oda</option>
+                  <option value="deluxe">Deluxe Oda</option>
+                  <option value="suit">Suit Oda</option>
+                  <option value="cave">Mağara Odası</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="specialRequests" class="form-label">Özel İstekler</label>
+                <textarea class="form-control" id="specialRequests" rows="3"></textarea>
+              </div>
+              <div class="form-check mb-4" style="text-align: left;">
+                <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                <label class="form-check-label" for="agreeTerms">
+                  <a href="#" style="color: #ab4610;">Rezervasyon koşullarını</a> okudum ve kabul ediyorum*
+                </label>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-submit">REZERVASYON YAP</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- İletişim -->
+  <div class="section" id="iletisim">
+    <h2 class="iletisim-baslik">İletişim</h2>
+    <p>Bize ulaşmak için <a href="mailto:info@nevsehirrehberi.com">info@nevsehirrehberi.com</a></p>
+    <p>Instagram: <a href="#">@nevsehir.gezi</a> | WhatsApp: +90 500 000 00 00</p>
+    
+    <div class="map-container">
+      <iframe 
+        width="100%" 
+        height="100%" 
+        frameborder="0" 
+        scrolling="no" 
+        marginheight="0" 
+        marginwidth="0" 
+        src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Kapadokya,%20Nev%C5%9Fehir+(Kapadokya)&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
+      </iframe>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    © 2025 Nevşehir Gezi Rehberi • Tüm Hakları Saklıdır.
+  </div>
+
+  <!-- Scriptler -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
+
+  <script>
+    // Otel Formu Bootstrap Modal ile açılır
+    function showHotelFormModal(e) {
+      var hotelName = e.currentTarget.getAttribute('data-hotel');
+      document.getElementById('selectedHotel').value = hotelName;
+      document.getElementById('hotelFormModalLabel').textContent = hotelName + ' REZERVASYON FORMU';
+      var modal = new bootstrap.Modal(document.getElementById('hotelFormModal'));
+      modal.show();
+    }
+
+    // Misafir Sayısı değiştiğinde diğer misafir alanlarını oluştur
+    document.getElementById('guestCount').addEventListener('change', function() {
+      const count = parseInt(this.value);
+      const container = document.getElementById('otherGuestsContainer');
+      container.innerHTML = '';
+      if (count && count > 1) {
+        const title = document.createElement('h5');
+        title.textContent = 'Diğer Misafir Bilgileri';
+        title.style.color = '#ab4610';
+        title.style.marginTop = '20px';
+        container.appendChild(title);
+        for (let i = 2; i <= count; i++) {
+          const row = document.createElement('div');
+          row.className = 'row mb-2';
+          row.innerHTML = `
+            <div class="col-md-12">
+              <label for="guestName${i}" class="form-label">${i}. Misafir Adı*</label>
+              <input type="text" class="form-control" id="guestName${i}" required>
+            </div>
+            
+          `;
+          container.appendChild(row);
+        }
+      }
+    });
+
+    // Form Gönderim İşlemi
+    document.getElementById('hotelRegistrationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const guestCount = parseInt(document.getElementById('guestCount').value);
+      const otherGuests = [];
+      if (guestCount && guestCount > 1) {
+        for (let i = 2; i <= guestCount; i++) {
+          otherGuests.push({
+            name: document.getElementById(`guestName${i}`).value,
+            //surname: document.getElementById(`guestSurname${i}`).value
+          });
+        }
+      }
+      const formData = {
+        key: 'hotel',
+        hotel: document.getElementById('selectedHotel').value,
+        name: document.getElementById('guestName').value,
+        email: document.getElementById('guestEmail').value,
+        phone: document.getElementById('guestPhone').value,
+        guests: document.getElementById('guestCount').value,
+        otherGuests: otherGuests,
+        checkin: document.getElementById('checkinDate').value,
+        checkout: document.getElementById('checkoutDate').value,
+        roomType: document.getElementById('roomType').value,
+        requests: document.getElementById('specialRequests').value
+      };
+      // Form verilerini backend'e gönder
+      fetch('save-rezervasyon.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(response => {
+        if (response.ok) {
+          alert(`${formData.hotel} için rezervasyon isteğiniz başarıyla kaydedildi!\n\nTeşekkür ederiz.`);
+          this.reset();
+          document.getElementById('otherGuestsContainer').innerHTML = '';
+          var modal = bootstrap.Modal.getInstance(document.getElementById('hotelFormModal'));
+          if(modal) modal.hide();
+        } else {
+          alert('Rezervasyon kaydedilemedi. Lütfen tekrar deneyin.');
+        }
+      })
+      .catch(() => {
+        alert('Sunucuya bağlanılamadı. Lütfen daha sonra tekrar deneyin.');
+      });
+    });
+
+    // Tarih kontrolleri (bugünden önceki tarihleri engelleme)
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('checkinDate').min = today;
+    document.getElementById('checkoutDate').min = today;
+    document.getElementById('checkinDate').addEventListener('change', function() {
+      document.getElementById('checkoutDate').min = this.value;
+    });
+  </script>
+</body>
+</html>
